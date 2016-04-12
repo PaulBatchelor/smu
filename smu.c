@@ -50,7 +50,7 @@ static Tag lineprefix[] = {
 	{ "#### ",	1,	"<h4>",		"</h4>" },
 	{ "### ",	1,	"<h3>",		"</h3>" },
 	{ "## ",	1,	"<h2>",		"</h2>" },
-	{ "# ",		1,	"<h1>",		"</h1>" },
+	{ "# ",		1,	"\\subsection*{",		"}" },
 	{ "- - -\n",	1,	"<hr />",	""},
 };
 
@@ -65,9 +65,8 @@ static Tag surround[] = {
 	{ "___",	1,	"<strong><em>",	"</em></strong>" },
 	{ "***",	1,	"<strong><em>",	"</em></strong>" },
 	{ "__",		1,	"<strong>",	"</strong>" },
-	{ "**",		1,	"<strong>",	"</strong>" },
-	{ "_",		1,	"<em>",		"</em>" },
-	{ "*",		1,	"<em>",		"</em>" },
+	{ "**",		1,	"\\textbf{",	"}" },
+	{ "*",		1,	"\\texit{",		"}" },
 };
 
 static const char *replace[][2] = {
@@ -326,7 +325,7 @@ dolist(const char *begin, const char *end, int newblock) {
 	buffer = ereallocz(buffer, BUFSIZ);
 	if(!newblock)
 		fputc('\n', stdout);
-	fputs(ul ? "<ul>\n" : "<ol>\n", stdout);
+	fputs(ul ? "\\begin{itemize}\n" : "<ol>\n", stdout);
 	run = 1;
 	for(; p < end && run; p++) {
 		for(i = 0; p < end && run; p++, i++) {
@@ -369,11 +368,11 @@ dolist(const char *begin, const char *end, int newblock) {
 			ADDC(buffer, i) = *p;
 		}
 		ADDC(buffer, i) = '\0';
-		fputs("<li>", stdout);
+		fputs("\\item{", stdout);
 		process(buffer, buffer + i, isblock > 1 || (isblock == 1 && run));
-		fputs("</li>\n", stdout);
+		fputs("}\n", stdout);
 	}
-	fputs(ul ? "</ul>\n" : "</ol>\n", stdout);
+	fputs(ul ? "\\end{itemize}\n" : "</ol>\n", stdout);
 	free(buffer);
 	p--;
 	while(*(--p) == '\n');
@@ -391,7 +390,7 @@ doparagraph(const char *begin, const char *end, int newblock) {
 		p = end;
 	if(p - begin <= 1)
 		return 0;
-	fputs("<p>", stdout);
+	fputs("", stdout);
 	process(begin, p, 0);
 	fputs("</p>\n", stdout);
 	return -(p - begin);

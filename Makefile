@@ -6,7 +6,7 @@ include config.mk
 SRC    = smu.c
 OBJ    = ${SRC:.c=.o}
 
-all: options smu
+all: options smutex
 
 options:
 	@echo smu build options:
@@ -20,13 +20,13 @@ options:
 
 ${OBJ}: config.mk
 
-smu: ${OBJ}
+smutex: ${OBJ}
 	@echo LD $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
 
 clean:
 	@echo cleaning
-	@rm -f smu ${OBJ} ${LIBOBJ} smu-${VERSION}.tar.gz
+	@rm -f smutex ${OBJ} ${LIBOBJ} smu-${VERSION}.tar.gz
 
 dist: clean
 	@echo creating dist tarball
@@ -39,17 +39,11 @@ dist: clean
 install: all
 	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
-	@cp -f smu ${DESTDIR}${PREFIX}/bin
-	@chmod 755 ${DESTDIR}${PREFIX}/bin/smu
-	@echo installing manual page to ${DESTDIR}${MANPREFIX}/man1
-	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
-	@sed "s/VERSION/${VERSION}/g" < smu.1 > ${DESTDIR}${MANPREFIX}/man1/smu.1
-	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/smu.1
+	@cp -f smutex ${DESTDIR}${PREFIX}/bin
+	@chmod 755 ${DESTDIR}${PREFIX}/bin/smutex
 
 uninstall:
 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
-	@rm -f ${DESTDIR}${PREFIX}/bin/smu
-	@echo removing manual page from ${DESTDIR}${MANPREFIX}/man1
-	@rm -f ${DESTDIR}${MANPREFIX}/man1/smu.1
+	@rm -f ${DESTDIR}${PREFIX}/bin/smutex
 
 .PHONY: all options clean dist install uninstall
