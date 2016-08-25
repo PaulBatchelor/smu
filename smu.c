@@ -66,7 +66,7 @@ static Tag surround[] = {
 	{ "***",	1,	"<strong><em>",	"</em></strong>" },
 	{ "__",		1,	"<strong>",	"</strong>" },
 	{ "**",		1,	"\\textbf{",	"}" },
-	{ "*",		1,	"\\texit{",		"}" },
+	{ "*",		1,	"\\textit{",		"}" },
 };
 
 static const char *replace[][2] = {
